@@ -51,10 +51,9 @@ class TicketController extends Controller
 
         // Generate QR code for the ticket
         $qrData = "TICKET_ID:{$ticket->id}|USER:{$user->email}|EVENT:{$event->title}";
-        $qrPath = 'qrcodes/ticket_' . $ticket->id . '.png';
+        $qrPath = 'qrcodes/ticket_' . $ticket->id . '.svg';
 
-        QrCode::format('png')->size(200)->generate($qrData, public_path($qrPath));
-        Storage::disk('public')->put($qrPath, $qrData);
+        QrCode::format('svg')->size(200)->generate($qrData, public_path($qrPath));
 
         // Update ticket with QR code path
         $ticket->qr_code = $qrPath;

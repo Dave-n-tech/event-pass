@@ -55,19 +55,29 @@ class EventController extends Controller
             }
         }
 
-
         //show all events
         // $events = Event::latest()->paginate(8);
         $events = $query->orderBy('event_date', 'asc')->paginate(8);
         return view('landing', compact('events'));
     }
 
-     /**
+    /**
      * Display the specified resource.
      */
     public function show(Event $event)
     {
-        return view('events.show', compact('event'));
+        $user = Auth::user();
+        $hasRegistered = false;
+
+        if ($user) {
+            $hasRegistered = $event->tickets()->where('user_id', $user->id)->exists();
+        }
+
+        return view('events.show', [
+            'event' => $event,
+            'hasRegistered' => $hasRegistered,
+            'layout' => 'app'
+        ]);
     }
 
 
@@ -159,5 +169,4 @@ class EventController extends Controller
 
         return view('events.attendees', compact('event', 'attendees'));
     }
-
 }

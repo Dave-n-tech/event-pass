@@ -1,17 +1,35 @@
-@component('mail::message')
-# Hello {{ $ticket->user->name }},
+<!DOCTYPE html>
+<html>
 
-You have successfully registered for **{{ $event->title }}**!
+<head>
+    <meta charset="UTF-8">
+    <title>Your Ticket</title>
+</head>
 
-**Event Details:**
-- Date: {{ $event->event_date }}
-- Location: {{ $event->location ?? 'To be announced' }}
+<body>
+    <h2>Hello, {{ $ticket->user->name }}</h2>
 
-Please find your ticket QR code attached to this email.  
-Present it at the event entrance for verification.
+    <p>Thank you for registering for <strong>{{ $ticket->event->title }}</strong>.</p>
 
-Thanks for using Event Pass!
+    <p>Here’s your ticket QR code:</p>
 
-Regards,<br>
-{{ config('app.name') }}
-@endcomponent
+    <div style="text-align: center; margin: 20px 0;">
+        <object data="{{ $qrCodeUrl }}" type="image/svg+xml" width="200" height="200">
+            Your QR code
+        </object>
+    </div>
+
+    <p>Show this QR code at the event entrance for verification.</p>
+
+    <p>Event Details:</p>
+    <ul>
+        <li><strong>Date:</strong> {{ $ticket->event->event_date->format('F j, Y') }}</li>
+        <li><strong>Location:</strong> {{ $ticket->event->location }}</li>
+    </ul>
+
+    <p>See you there!</p>
+
+    <p>— EventNest</p>
+</body>
+
+</html>

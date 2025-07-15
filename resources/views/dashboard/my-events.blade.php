@@ -38,7 +38,7 @@
             @if ($registeredEvents->count())
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($registeredEvents as $event)
-                        @include('dashboard.partials.event-card', ['event' => $event])
+                        <x-dashboard-event-card :event="$event" />
                     @endforeach
                 </div>
                 <div class="mt-4">
@@ -55,7 +55,7 @@
             @if ($allEvents->count())
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($allEvents as $event)
-                        @include('dashboard.partials.event-card', ['event' => $event])
+                        <x-dashboard-event-card :event="$event" />
                     @endforeach
                 </div>
                 <div class="mt-4">

@@ -122,8 +122,19 @@ class DashboardController extends Controller
 
     public function showEvent(Event $event)
     {
-        $this->authorize('view', $event);
-        return view('dashboard.event-details', compact('event'));
+        $user = Auth::user();
+
+        if(!$user){
+            abort(403, "Unauthorized");
+        }
+
+        $hasRegistered = $event->tickets()->where('user_id', $user->id)->exists();
+
+        return view('events.show',  [
+            'event' => $event,
+            'hasRegistered' => $hasRegistered,
+            'layout' => 'dashboard'
+        ]);
     }
 
     public function createEvent()

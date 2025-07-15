@@ -49,15 +49,20 @@
                             <img class="h-40 w-full object-cover" src={{ $event->image }} alt="Event">
                             <div class="p-4">
                                 <h3 class="text-lg font-medium text-gray-900">{{ $event->title }}</h3>
-                                <p class="text-[11px] text-gray-500">{{ \Carbon\Carbon::parse($event->event_date)->format('M d, Y')}}</p>
-                                <p class="text-sm text-gray-400 mt-2">{{$event->description}}</p>
+                                <p class="text-[11px] text-gray-500">
+                                    {{ \Carbon\Carbon::parse($event->event_date)->format('M d, Y') }}</p>
+                                <p class="text-sm text-gray-400 mt-2">{{ $event->description }}</p>
                                 <p class="text-sm text-gray-900 mt-2">{{ $event->location }}</p>
                                 @if ($event->price == 0)
                                     <p class="text-sm text-green-600 font-bold mt-2">Free</p>
                                 @else
                                     <p class="text-sm text-gray-900 font-bold mt-2">
-                                        ${{ number_format($event->price) }}</p>
+                                        ${{ number_format($event->price, 2) }}</p>
                                 @endif
+                                <a href="{{ route('dashboard.event-details', $event->id) }}"
+                                    class="inline-block mt-4 text-indigo-600 hover:text-indigo-800">
+                                    View Details
+                                </a>
                             </div>
                         </div>
                     @endforeach
@@ -73,13 +78,14 @@
                             <li>
                                 <div class="px-4 py-4 sm:px-6">
                                     <div class="flex items-center justify-between">
-                                        <p class="text-sm font-medium text-indigo-600 truncate">{{$activity['event']}}</p>
+                                        <p class="text-sm font-medium text-indigo-600 truncate">{{ $activity['event'] }}
+                                        </p>
                                         <p
                                             class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            {{$activity['date']}}</p>
+                                            {{ $activity['date'] }}</p>
                                     </div>
                                     <div class="mt-2 sm:flex sm:justify-between">
-                                        <p class="flex items-center text-sm text-gray-500">{{$activity['details']}}</p>
+                                        <p class="flex items-center text-sm text-gray-500">{{ $activity['details'] }}</p>
                                     </div>
                                 </div>
                             </li>

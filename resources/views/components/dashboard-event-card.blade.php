@@ -7,7 +7,8 @@
         <p class="text-sm text-gray-500 mb-1">{{ \Carbon\Carbon::parse($event->event_date)->format('M d, Y') }}</p>
         <p class="text-sm text-gray-500">{{ $event->location }}</p>
         <p class="mt-2 font-medium">{{ $event->price > 0 ? '$' . $event->price : 'Free' }}</p>
-        <a href="{{ route('events.show', $event->id) }}" class="inline-block mt-4 text-indigo-600 hover:text-indigo-800">
+        <a href="{{ route('dashboard.event-details', $event->id) }}"
+            class="inline-block mt-4 text-indigo-600 hover:text-indigo-800">
             View Details
         </a>
     </div>

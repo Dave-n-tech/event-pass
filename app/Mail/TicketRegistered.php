@@ -30,17 +30,12 @@ class TicketRegistered extends Mailable
     public function build()
     {
         // Path to the QR code in your storage
-        $qrPath = storage_path('app/public/' . $this->ticket->qr_code_path);
+        // $qrPath = storage_path('app/public/' . $this->ticket->qr_code_path);
 
-        return $this->subject('Your Ticket for ' . $this->ticket->event->title)
-            ->markdown('emails.tickets.registered')
-            ->attach($qrPath, [
-                'as' => 'ticket_qr.png',
-                'mime' => 'image/png',
-            ])
+        return $this->view('emails.ticket.registered')
             ->with([
                 'ticket' => $this->ticket,
-                'event' => $this->ticket->event,
+                'qrCodeUrl' => asset($this->ticket->qr_code)
             ]);
     }
 
