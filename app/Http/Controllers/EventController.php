@@ -13,20 +13,71 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = Event::query();
+
+        // Basic search by title, location, or category
+        if ($request->filled('query')) {
+            $search = $request->query('query');
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('location', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+        }
+
+        // Filters
+        if ($request->filled('date')) {
+            $query->whereDate('event_date', $request->query('date'));
+        }
+
+        if ($request->filled('location')) {
+            $query->where('location', 'like', "%{$request->query('location')}%");
+        }
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->query('category'));
+        }
+
+        if ($request->filled('price')) {
+            $price = $request->query('price');
+            if ($price === 'free') {
+                $query->where('price', 0);
+            } elseif ($price === 'paid') {
+                $query->where('price', '>', 0);
+            } elseif ($price === '0-25') {
+                $query->whereBetween('price', [0, 25]);
+            } elseif ($price === '25-50') {
+                $query->whereBetween('price', [25, 50]);
+            } elseif ($price === '50-100') {
+                $query->whereBetween('price', [50, 100]);
+            } elseif ($price === '100+') {
+                $query->where('price', '>', 100);
+            }
+        }
+
+
         //show all events
-        $events = Event::latest()->paginate(10);
-        return view('events.index', compact('events'));
+        // $events = Event::latest()->paginate(8);
+        $events = $query->orderBy('event_date', 'asc')->paginate(8);
+        return view('landing', compact('events'));
     }
+
+     /**
+     * Display the specified resource.
+     */
+    public function show(Event $event)
+    {
+        return view('events.show', compact('event'));
+    }
+
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        return view('events.create');
-    }
+    // public function create()
+    // {
+    //     return view('events.create');
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -58,22 +109,11 @@ class EventController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Event $event)
-    {
-        return view('events.show', compact('event'));
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Event $event)
     {
-        if ($event->user_id !== Auth::id()) {
-            abort(403);
-        }
-
+        $this->authorize('update', $event);
         return view('events.edit', compact('event'));
     }
 
@@ -82,9 +122,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        if ($event->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->authorize('update', $event);
 
         $request->validate([
             'title' => 'required|string|max:255',
@@ -106,9 +144,7 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        if ($event->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->authorize('delete', $event);
 
         $event->delete();
 
@@ -117,10 +153,11 @@ class EventController extends Controller
 
     public function attendees(Event $event)
     {
-        $this->authorize('view', $event); // Optional: use policy or check user_id
+        $this->authorize('view', $event);
 
         $attendees = $event->tickets()->with('user')->get();
 
         return view('events.attendees', compact('event', 'attendees'));
     }
+
 }
