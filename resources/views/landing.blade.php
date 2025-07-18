@@ -28,11 +28,17 @@
         <section class="py-16 container mx-auto px-4">
             <div class="flex justify-between items-center mb-8">
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-900">
-                    Latest Events
+                    @if (request('query'))
+                        Search results for: "{{ request('query') }}"
+                    @else
+                        Latest Events
+                    @endif
                 </h2>
-                <a href="{{ route('events.index') }}" class="text-indigo-600 hover:text-indigo-800 font-medium">
-                    View all events
-                </a>
+                @if (request('query'))
+                    <a href="{{ route('events.index') }}" class="text-indigo-600 hover:text-indigo-800 font-medium">
+                        View all events
+                    </a>
+                @endif
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($events as $event)

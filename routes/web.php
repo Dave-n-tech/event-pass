@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\WalletController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/create-event', [DashboardController::class, 'createEvent'])->name('dashboard.create-event');
 
     // Show form to edit event
-    Route::get('/dashboard/my-events/{event}/edit', [EventController::class, 'edit'])
+    Route::get('/dashboard/my-events/{event}/edit', [DashboardController::class, 'editEvent'])
         ->name('dashboard.edit-event');
 
     // ✅ My Wallet

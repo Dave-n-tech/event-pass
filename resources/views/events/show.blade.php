@@ -14,11 +14,20 @@
     @endif
 
     <div class="max-w-5xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        @if ($layout === 'app')
+            <a href="{{ route('events.index') }}" class="my-4 text-indigo-600 hover:text-indigo-800 font-medium">
+                < back</a>
+        @endif
+        @if ($layout === 'dashboard')
+            <a href="{{ route('dashboard.my-events') }}" class="my-4 text-indigo-600 hover:text-indigo-800 font-medium">
+                < back</a>
+        @endif
         <div class="bg-white shadow overflow-hidden rounded-lg">
-            <img src="{{ $event->image ?? 'https://via.placeholder.com/1200x400' }}" alt="{{ $event->title }}"
+            <img src="{{ $event->display_image ?? 'https://via.placeholder.com/1200x400' }}" alt="{{ $event->title }}"
                 class="w-full h-72 object-cover rounded-t-lg">
 
             <div class="px-6 py-8">
+                <x-category-time-badge :event="$event" />
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $event->title }}</h1>
 
                 <p class="text-gray-600 mb-4">{{ $event->description }}</p>

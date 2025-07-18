@@ -26,7 +26,7 @@
         </button>
     </form>
 
-    <div x-show="showFilters" class="mt-3 p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div x-show="showFilters" class="mt-3 p-4 text-black bg-white border border-gray-200 rounded-lg shadow-sm">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>

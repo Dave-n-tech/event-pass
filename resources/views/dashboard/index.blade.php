@@ -46,8 +46,9 @@
                 <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($upcomingEvents as $event)
                         <div class="bg-white overflow-hidden shadow rounded-lg">
-                            <img class="h-40 w-full object-cover" src={{ $event->image }} alt="Event">
+                            <img class="h-40 w-full object-cover" src={{ $event->display_image }} alt="Event">
                             <div class="p-4">
+                                <x-category-time-badge :event="$event" />
                                 <h3 class="text-lg font-medium text-gray-900">{{ $event->title }}</h3>
                                 <p class="text-[11px] text-gray-500">
                                     {{ \Carbon\Carbon::parse($event->event_date)->format('M d, Y') }}</p>

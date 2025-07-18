@@ -21,7 +21,7 @@ class TicketFactory extends Factory
         return [
             'user_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
             'event_id' => Event::inRandomOrder()->first()?->id ?? Event::factory(),
-            'user-email' => $this->faker->unique()->safeEmail(),
+            'user_email' => $this->faker->unique()->safeEmail(),
             'quantity' => $this->faker->numberBetween(1, 5),
             'qr_code' => null, // QR code will be generated later
         ];

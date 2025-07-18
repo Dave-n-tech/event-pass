@@ -1,7 +1,6 @@
 <div class="bg-white overflow-hidden shadow rounded-lg">
     <div class="relative h-48">
-        <img src="{{ $event->image ?? 'https://via.placeholder.com/400x300' }}" alt="{{ $event->title }}"
-            class="w-full h-full object-cover">
+        <img src="{{ $event->display_image }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
         @if ($event->status === 'draft')
             <span
                 class="absolute top-2 right-2 bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md text-xs font-medium">Draft</span>
@@ -11,6 +10,7 @@
         @endif
     </div>
     <div class="p-4">
+        <x-category-time-badge :event="$event" />
         <a href="{{ route('dashboard.event-details', $event->id) }}">
             <h3 class="text-lg font-semibold text-gray-900 hover:text-indigo-600 truncate">{{ $event->title }}</h3>
         </a>

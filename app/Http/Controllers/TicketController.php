@@ -45,7 +45,7 @@ class TicketController extends Controller
         $ticket = Ticket::create([
             'user_id' => $user->id,
             'event_id' => $event->id,
-            'user-email' => $user->email,
+            'user_email' => $user->email,
             'quantity' => 1
         ]);
 

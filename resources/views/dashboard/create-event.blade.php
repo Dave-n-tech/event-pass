@@ -5,7 +5,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <h1 class="text-2xl font-semibold text-gray-900">Create Event</h1>
 
-            <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data" class="mt-6">
+            <form action="{{ route('events.store', $event) }}" method="POST" enctype="multipart/form-data" class="mt-6">
                 @csrf
 
                 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
@@ -45,13 +45,13 @@
                                     class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
                                     <option value="">Select a category</option>
                                     <option value="music">Music</option>
-                                    <option value="food-drink">Food & Drink</option>
+                                    <option value="food & drink">Food & Drink</option>
                                     <option value="business">Business & Professional</option>
                                     <option value="arts">Arts & Culture</option>
-                                    <option value="sports-fitness">Sports & Fitness</option>
-                                    <option value="health">Health & Wellness</option>
-                                    <option value="technology">Science & Technology</option>
-                                    <option value="community">Community & Culture</option>
+                                    <option value="sports & fitness">Sports & Fitness</option>
+                                    <option value="health & wellness">Health & Wellness</option>
+                                    <option value="science and technology">Science & Technology</option>
+                                    <option value="community & culture">Community & Culture</option>
                                     <option value="charity">Charity & Causes</option>
                                     <option value="other">Other</option>
                                 </select>
@@ -61,22 +61,30 @@
                             </div>
 
                             <div class="sm:col-span-6">
-                                <label for="image" class="block text-sm font-medium text-gray-700">Event Image</label>
-                                <input type="file" name="image" id="image"
-                                    x-on:change="imageUrl = URL.createObjectURL($event.target.files[0])"
-                                    class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <div>
+                                    <label class="block font-medium">Upload Image</label>
+                                    <input type="file" name="image_file" id="image_file" class="form-input mt-1">
+                                </div>
 
-                                @error('image')
+                                <div class="mt-1">
+                                    <label class="block font-medium">Or Provide Image URL</label>
+                                    <input type="url" name="image_url" id="image_url" class="form-input mt-1 w-full"
+                                        value="{{ old('image_url') }}">
+                                </div>
+
+                                @error('image_file')
                                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
 
-                                <p class="mt-2 text-sm text-gray-500">Upload an image for your event.</p>
+                                @error('image_url')
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
 
-                                <div x-data="{ imageUrl: '' }" class="mt-4">
-                                    <template x-if="imageUrl">
-                                        <img :src="imageUrl" alt="Preview"
-                                            class="h-48 w-full object-cover rounded-md border">
-                                    </template>
+                                <div class="mb-4 mt-2">
+                                    <label class="block font-semibold mb-1">Image Preview</label>
+                                    <img id="image_preview"
+                                        src="{{ $event->image_url ? $event->image_url : ($event->image_file ? asset('storage/' . $event->image_file) : '') }}"
+                                        alt="Image Preview" class="w-64 h-40 object-cover border border-gray-300 rounded">
                                 </div>
                             </div>
 
@@ -99,6 +107,16 @@
                                     class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                     value="{{ old('event_date') }}">
                                 @error('event_date')
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                <label for="time" class="block text-sm font-medium text-gray-700">Time</label>
+                                <input type="time" name="time" id="time"
+                                    class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    value="{{ old('time') }}">
+                                @error('time')
                                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -172,4 +190,27 @@
             </form>
         </div>
     </div>
+
+    <script>
+        const fileInput = document.getElementById('image_file');
+        const urlInput = document.getElementById('image_url');
+        const preview = document.getElementById('image_preview');
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    preview.src = event.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        urlInput.addEventListener('input', function() {
+            preview.src = this.value;
+        });
+    </script>
 @endsection

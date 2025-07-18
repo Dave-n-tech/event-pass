@@ -92,40 +92,58 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Event $event)
     {
-        $request->validate([
+        $this->authorize('create', $event);
+
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'location' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'category' => 'nullable|string|max:255',
+            'image_url' => 'nullable|url',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'capacity' => 'nullable|integer|min:1',
             'event_date' => 'required|date',
+            'time' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
         ]);
 
+
+        $imagePath = null;
+        $imageUrl = null;
+
+        if ($request->hasFile('image_file')) {
+            $imagePath = $request->file('image_file')->store('events', 'public');
+        } elseif (!empty($validated['image_url'])) {
+            $imageUrl = $validated['image_url'];
+        }
+
         Event::create([
             'user_id' => Auth::id(),
-            'title' => $request->title,
-            'description' => $request->description,
-            'location' => $request->location,
-            'image' => $request->file('image') ? $request->file('image')->store('images', 'public') : null,
-            'capacity' => $request->capacity,
-            'event_date' => $request->event_date,
-            'price' => $request->price,
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'location' => $validated['location'],
+            'category' => $validated['category'],
+            'image_url' => $imageUrl,
+            'image_file' => $imagePath,
+            'capacity' => $validated['capacity'],
+            'event_date' => $validated['event_date'],
+            'time' => $validated['time'],
+            'price' => $validated['price'],
         ]);
 
-        return redirect()->route('events.index')->with('success', 'Event created successfully.');
+        return redirect()->route('dashboard.my-events')->with('success', 'Event created successfully.');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Event $event)
-    {
-        $this->authorize('update', $event);
-        return view('events.edit', compact('event'));
-    }
+    // public function edit(Event $event)
+    // {
+    //     $this->authorize('update', $event);
+    //     return view('events.edit', compact('event'));
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -134,19 +152,41 @@ class EventController extends Controller
     {
         $this->authorize('update', $event);
 
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'location' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'category' => 'nullable|string|max:255',
+            'image_url' => 'nullable|url',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'capacity' => 'nullable|integer|min:1',
             'event_date' => 'required|date',
+            'time' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
         ]);
 
-        $event->update($request->only('title', 'description', 'location', 'image', 'capacity', 'event_date', 'price'));
+        if ($request->hasFile('image_file')) {
+            $path = $request->file('image_file')->store('events', 'public');
+            $event->image_file = $path;
 
-        return redirect()->route('events.index')->with('success', 'Event updated successfully.');
+            $event->image_url = null;
+        } elseif (!empty($validated['image_url'])) {
+            $event->image_url = $validated['image_url'];
+            $event->image_file = null;
+        }
+
+        $event->title = $validated['title'];
+        $event->description = $validated['description'] ?? null;
+        $event->location = $validated['location'] ?? null;
+        $event->event_date = $validated['event_date'];
+        $event->time = $validated['time'] ?? null;
+        $event->category = $validated['category'] ?? null;
+        $event->price = $validated['price'] ?? null;
+        $event->capacity = $validated['capacity'] ?? null;
+
+        $event->save();
+
+        return redirect()->route('dashboard.my-events')->with('success', 'Event updated successfully.');
     }
 
     /**

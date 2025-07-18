@@ -137,8 +137,15 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function createEvent()
+    public function createEvent(Event $event)
     {
-        return view('dashboard.create-event');
+        $this->authorize('create', $event);
+        return view('dashboard.create-event', compact('event'));
+    }
+
+    public function editEvent(Event $event)
+    {
+        $this->authorize('update', $event);
+        return view('dashboard.edit-event', compact('event'));
     }
 }
