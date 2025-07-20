@@ -8,6 +8,18 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\WalletController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
+
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/test-email', function () {
+    Mail::raw('Test email content', function ($message) {
+        $message->to('davefast2003@gmail.com')
+                ->subject('Test Email');
+    });
+
+    return 'Email sent';
+});
+
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -45,37 +57,49 @@ Route::post('/events/{event}/register', [TicketController::class, 'store'])
 */
 
 Route::middleware(['auth'])->group(function () {
-    // ✅ Dashboard Summary
+    // Dashboard Summary
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // ✅ My Events (created by me)
+    // My Events (created by me)
     Route::get('/dashboard/my-events', [DashboardController::class, 'myEvents'])->name('dashboard.my-events');
 
-    // ✅ Single event detail inside dashboard
+    // Single event detail inside dashboard
     Route::get('/dashboard/my-events/{event}', [DashboardController::class, 'showEvent'])->name('dashboard.event-details');
 
-    // viw attendees for my event
+    // view attendees for my event
     Route::get('/dashboard/my-events/{event}/attendees', [EventController::class, 'attendees'])
         ->name('dashboard.event-attendees');
 
-    // ✅ Create Event (from dashboard)
+    // Create Event (from dashboard)
     Route::get('/dashboard/create-event', [DashboardController::class, 'createEvent'])->name('dashboard.create-event');
 
     // Show form to edit event
     Route::get('/dashboard/my-events/{event}/edit', [DashboardController::class, 'editEvent'])
         ->name('dashboard.edit-event');
 
-    // ✅ My Wallet
-    Route::get('/dashboard/wallet', [WalletController::class, 'index'])->name('dashboard.wallet');
+    // Chackout page to register for event
+    Route::get('/checkout/{event}', [EventController::class, 'checkout'])->name('dashboard.checkout');
 
-    // ✅ Profile Settings
+
+    // route to show tickets
+    Route::get('/dashboard/my-tickets', [TicketController::class, 'index'])->name('dashboard.ticket');
+    Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('dashboard.show-ticket');
+    Route::get('/tickets/{ticket}/download', [TicketController::class, 'download'])->name('dashboard.download-ticket');
+
+
+    // My Wallet
+    Route::get('/dashboard/wallet', [WalletController::class, 'show'])->name('dashboard.wallet');
+    Route::get('/dashboard/wallet/fund', [WalletController::class, 'showFundForm'])->name('wallet.fund');
+    Route::post('/dashboard/wallet/fund', [WalletController::class, 'processFund'])->name('wallet.fund.submit');
+
+    // Profile Settings
     Route::get('/dashboard/profile-settings', [ProfileController::class, 'edit'])->name('dashboard.profile-settings');
     Route::patch('/dashboard/profile-settings', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/dashboard/profile-settings', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // ✅ My Tickets (events I registered for)
-    Route::get('/my-tickets', [TicketController::class, 'index'])->name('tickets.index');
-    Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
+    // My Tickets (events I registered for)
+    // Route::get('/my-tickets', [TicketController::class, 'index'])->name('tickets.index');
+    // Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
 });
 
 /*

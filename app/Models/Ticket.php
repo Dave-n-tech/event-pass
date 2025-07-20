@@ -16,6 +16,7 @@ class Ticket extends Model
         'user_email',
         'quantity',
         'qr_code',
+        'ticket_code',
     ];
 
     public function user()

@@ -4,7 +4,7 @@
     use Illuminate\Support\Carbon;
 
     try {
-        $formattedTime = $event->time ? Carbon::parse($event->time)->format('g:i A') : 'Time not specified';
+        $formattedTime = $event->time ? Carbon::parse($event->time)->format('g:i A') : 'Not specified';
     } catch (\Exception $e) {
         $formattedTime = 'Invalid time';
     }
@@ -12,7 +12,7 @@
     $category = $event->category ?? 'Uncategorized';
 @endphp
 
-<div class="flex gap-2 mt-2">
+<div class="flex gap-2 mt-2 mb-2">
     {{-- Category Badge --}}
     <span
         class="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">

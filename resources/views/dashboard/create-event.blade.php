@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 md:px-8">
             <h1 class="text-2xl font-semibold text-gray-900">Create Event</h1>
 
             <form action="{{ route('events.store', $event) }}" method="POST" enctype="multipart/form-data" class="mt-6">
@@ -50,7 +50,7 @@
                                     <option value="arts">Arts & Culture</option>
                                     <option value="sports & fitness">Sports & Fitness</option>
                                     <option value="health & wellness">Health & Wellness</option>
-                                    <option value="science and technology">Science & Technology</option>
+                                    <option value="science & technology">Science & Technology</option>
                                     <option value="community & culture">Community & Culture</option>
                                     <option value="charity">Charity & Causes</option>
                                     <option value="other">Other</option>

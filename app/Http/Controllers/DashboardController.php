@@ -105,26 +105,30 @@ class DashboardController extends Controller
         ));
     }
 
-    public function myEvents()
+    public function myEvents(Event $event)
     {
         $userId = Auth::id();
 
-        $createdEvents = Event::where('user_id', $userId)->latest()->paginate(8);
+        $createdEvents = Event::where('user_id', $userId)->latest()->get();
 
         $registeredEvents = Event::whereHas('tickets', function ($query) use ($userId) {
             $query->where('user_id', $userId);
-        })->orderBy('event_date', 'asc')->paginate(8);
+        })->orderBy('event_date', 'asc')->get();
 
-        $allEvents = Event::orderBy('event_date', 'asc')->paginate(8);
+        $allEvents = Event::orderBy('event_date', 'asc')->paginate(8)->withQueryString();
 
-        return view('dashboard.my-events', compact('createdEvents', 'registeredEvents', 'allEvents'));
+        return view('dashboard.my-events', [
+            'createdEvents' => $createdEvents,
+            'registeredEvents' => $registeredEvents,
+            'allEvents' => $allEvents
+        ]);
     }
 
     public function showEvent(Event $event)
     {
         $user = Auth::user();
 
-        if(!$user){
+        if (!$user) {
             abort(403, "Unauthorized");
         }
 

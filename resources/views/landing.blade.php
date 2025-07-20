@@ -42,7 +42,10 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($events as $event)
-                    <x-event-card :event="$event" />
+                    @php
+                        $hasRegistered = $event->tickets->contains('user_id', auth()->id());
+                    @endphp
+                    <x-event-card :event="$event" :has-registered="$hasRegistered"/>
                 @empty
                     <p>No events found.</p>
                 @endforelse

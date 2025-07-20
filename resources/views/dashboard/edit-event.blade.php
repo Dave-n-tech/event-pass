@@ -1,6 +1,19 @@
 @extends('layouts.dashboard')
 
 @section('content')
+    @php
+        $categories = [
+            'Music',
+            'Food & Drink',
+            'Business & Professional',
+            'Arts & Culture',
+            'Sports & Fitness',
+            'Health & Wellness',
+            'Science & Technology',
+            'Community & Culture',
+            'Charity & Causes',
+        ];
+    @endphp
     <div class="max-w-4xl mx-auto px-4 py-8">
         <a href="{{ route('dashboard.my-events') }}" class="text-indigo-600 hover:underline mb-4 inline-block">
             ← Back to My Events
@@ -51,8 +64,27 @@
                     class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-indigo-200" required>{{ old('description', $event->description) }}</textarea>
             </div>
 
+            {{-- Category --}}
+            <div class="sm:col-span-3">
+                {{-- <p>Current category: {{ $event->category }} {{ $categories[ucwords($event->category)] }}</p> --}}
+                <label for="category" class="block font-medium">Category *</label>
+                <select id="category" name="category" required
+                    class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                    <option value="">Select a category</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category }}" {{ ucwords($event->category) === $category ? 'selected' : '' }}>
+                            {{ $category }}
+                        </option>
+                    @endforeach
+                    <option value="other">Other</option>
+                </select>
+                @error('category')
+                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
             {{-- Date --}}
-            <div class="mb-4">
+            <div class="mb-4 mt-4">
                 <label class="block font-medium mb-1">Event Date</label>
                 <input type="date" name="event_date"
                     value="{{ old('event_date', \Carbon\Carbon::parse($event->event_date)->format('Y-m-d')) }}"
@@ -76,8 +108,8 @@
             {{-- price --}}
             <div class="mb-4">
                 <label class="block font-medium mb-1">Price</label>
-                <input type="number" name="price" value="{{ old('price', $event->price) }}"
-                    min="0" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-indigo-200">
+                <input type="number" name="price" value="{{ old('price', $event->price) }}" min="0"
+                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-indigo-200">
             </div>
 
             {{-- Image Upload with Preview --}}

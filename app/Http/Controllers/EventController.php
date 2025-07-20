@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -209,4 +210,19 @@ class EventController extends Controller
 
         return view('events.attendees', compact('event', 'attendees'));
     }
+
+    public function checkout(Event $event)
+    {
+        $user = Auth::user();
+
+        if(!$user){
+            abort(403, 'Forbidden');
+        }
+
+        $walletBalance = $user->wallet->balance ?? 0;
+        $ticketPrice = $event->price;
+
+        return view('dashboard.checkout', compact('event', 'walletBalance', 'ticketPrice'));
+    }
+
 }

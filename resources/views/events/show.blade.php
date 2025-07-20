@@ -57,13 +57,14 @@
                     @if ($hasRegistered)
                         <p class="text-green-600">You’ve already registered for this event.</p>
                     @else
-                        <form action="{{ route('tickets.store', $event) }}" method="POST">
-                            @csrf
-                            <button type="submit"
+                        @if ($event->user_id === Auth::id())
+                            <p class="text-green-600">Event created by you.</p>
+                        @else
+                            <a href="{{ route('dashboard.checkout', $event)}}"
                                 class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700">
                                 Register for this Event
-                            </button>
-                        </form>
+                            </a>
+                        @endif
                     @endif
                 @else
                     <a href="{{ route('login') }}"

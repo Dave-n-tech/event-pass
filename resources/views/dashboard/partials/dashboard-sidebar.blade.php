@@ -19,6 +19,7 @@
                     ['name' => 'My Events', 'href' => route('dashboard.my-events'), 'icon' => 'calendar-days'],
                     ['name' => 'Create Event', 'href' => route('dashboard.create-event'), 'icon' => 'plus'],
                     ['name' => 'My Wallet', 'href' => route('dashboard.wallet'), 'icon' => 'wallet'],
+                    ['name' => 'Tickets', 'href' => route('dashboard.ticket'), 'icon' => 'ticket'],
                     ['name' => 'Profile Settings', 'href' => route('dashboard.profile-settings'), 'icon' => 'user'],
                 ];
             @endphp

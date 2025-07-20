@@ -9,6 +9,7 @@ class AppServiceProvider extends ServiceProvider
 
     protected $policies = [
         \App\Models\Event::class => \App\Policies\EventPolicy::class,
+        \App\Models\Ticket::class => \App\Policies\TicketPolicy::class,
     ];
 
     /**

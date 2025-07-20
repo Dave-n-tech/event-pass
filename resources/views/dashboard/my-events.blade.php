@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <!-- Page Heading -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-semibold text-gray-900">My Events</h1>
@@ -21,12 +21,14 @@
             @if ($createdEvents->count())
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($createdEvents as $event)
-                        @include('dashboard.partials.event-card', ['event' => $event])
+                        @include('dashboard.partials.event-card', [
+                            'event' => $event,
+                        ])
                     @endforeach
                 </div>
-                <div class="mt-4">
+                {{-- <div class="mt-4">
                     {{ $createdEvents->links() }}
-                </div>
+                </div> --}}
             @else
                 <p class="text-gray-500">You haven’t created any events yet.</p>
             @endif
@@ -38,12 +40,15 @@
             @if ($registeredEvents->count())
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($registeredEvents as $event)
-                        <x-dashboard-event-card :event="$event" />
+                        @php
+                            $hasRegistered = $event->tickets->contains('user_id', auth()->id());
+                        @endphp
+                        <x-dashboard-event-card :event="$event" :has-registered="$hasRegistered" />
                     @endforeach
                 </div>
-                <div class="mt-4">
+                {{-- <div class="mt-4">
                     {{ $registeredEvents->links() }}
-                </div>
+                </div> --}}
             @else
                 <p class="text-gray-500">You’re not registered for any events yet.</p>
             @endif
@@ -55,7 +60,10 @@
             @if ($allEvents->count())
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($allEvents as $event)
-                        <x-dashboard-event-card :event="$event" />
+                        @php
+                            $hasRegistered = $event->tickets->contains('user_id', auth()->id());
+                        @endphp
+                        <x-dashboard-event-card :event="$event" :has-registered="$hasRegistered" />
                     @endforeach
                 </div>
                 <div class="mt-4">
