@@ -24,11 +24,6 @@
                     <img src="{{ asset('storage/'.$ticket->qr_code) }}" alt="QR Code" class="w-48 h-48 mx-auto">
                 @endif
 
-                {{-- <div class="mt-6">
-            <img src="data:image/png;base64, {!! base64_encode(
-                QrCode::format('png')->size(150)->generate(route('dashboard.show-ticket', $ticket->id)),
-            ) !!} " alt="QR Code" class="mx-auto">
-        </div> --}}
 
                 <div class="mt-6 text-center">
                     <a href="{{ route('dashboard.download-ticket', $ticket->id) }}"

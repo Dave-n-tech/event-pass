@@ -11,12 +11,12 @@
 
     <p>Thank you for registering for <strong>{{ $ticket->event->title }}</strong>.</p>
 
-    <p>Here’s your ticket QR code:</p>
+    <p>Your ticket code is: <strong>{{ $ticket->ticket_code }}</strong></p>
+
+    <p style="font-weight: 700;">Here’s your ticket QR code:</p>
 
     <div style="text-align: center; margin: 20px 0;">
-        <object data="{{ $qrCodeUrl }}" type="image/svg+xml" width="200" height="200">
-            Your QR code
-        </object>
+        <img src="{{ $qrCodeUrl }}" alt="QR Code" style="width:200px;" />
     </div>
 
     <p>Show this QR code at the event entrance for verification.</p>
@@ -27,9 +27,11 @@
         <li><strong>Location:</strong> {{ $ticket->event->location }}</li>
     </ul>
 
+    <p>Your ticket is attached as a PDF. See you at the event!</p>
+
     <p>See you there!</p>
 
-    <p>— EventNest</p>
+    <p>— EventPass</p>
 </body>
 
 </html>

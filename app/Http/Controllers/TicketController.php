@@ -63,6 +63,22 @@ class TicketController extends Controller
         }
 
         $ticket = Ticket::with('event', 'user')->findOrFail($ticket->id);
+
+        if (!$ticket->qr_code || !Storage::disk('public')->exists($ticket->qr_code)) {
+            $qrCode = new QrCode($ticket->ticket_code);
+            $qrCode->setSize(300);
+            $qrCode->setMargin(10);
+
+            $writer = new PngWriter();
+            $qrImage = $writer->write($qrCode);
+
+            $fileName = 'qrcodes/' . $ticket->ticket_code . '.png';
+            Storage::disk('public')->put($fileName, $qrImage->getString());
+
+            $ticket->qr_code = $fileName;
+            $ticket->save();
+        }
+
         $pdf = Pdf::loadView('tickets.pdf', compact('ticket'));
 
         return $pdf->download("Ticket-{$ticket->id}.pdf");

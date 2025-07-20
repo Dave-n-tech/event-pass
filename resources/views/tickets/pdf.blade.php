@@ -47,7 +47,7 @@
 
         <div class="section">
             @if ($ticket->qr_code)
-                <img src="{{ asset('storage/' . $ticket->qr_code) }}" alt="QR Code" class="w-48 h-48">
+                <img src="{{ storage_path('app/public/' . $ticket->qr_code) }}" alt="QR Code" class="w-48 h-48">
             @endif
         </div>
     </div>

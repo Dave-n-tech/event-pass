@@ -9,6 +9,10 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Endroid\QrCode\QrCode;
+use Illuminate\Support\Facades\Storage;
+use Endroid\QrCode\Writer\PngWriter;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TicketRegistered extends Mailable
 {
@@ -29,14 +33,32 @@ class TicketRegistered extends Mailable
      */
     public function build()
     {
-        // Path to the QR code in your storage
-        // $qrPath = storage_path('app/public/' . $this->ticket->qr_code_path);
+        if (!$this->ticket->qr_code || !Storage::disk('public')->exists($this->ticket->qr_code)) {
+            $qrCode = new QrCode($this->ticket->ticket_code);
+            $qrCode->setSize(300);
+            $qrCode->setMargin(10);
 
-        return $this->view('emails.ticket.registered')
+            $writer = new PngWriter();
+            $qrImage = $writer->write($qrCode);
+
+            $fileName = 'qrcodes/' . $this->ticket->ticket_code . '.png';
+            Storage::disk('public')->put($fileName, $qrImage->getString());
+
+            $this->ticket->qr_code = $fileName;
+            $this->ticket->save();
+        }
+
+        $pdf = Pdf::loadView('tickets.pdf', ['ticket' => $this->ticket]);
+
+        return $this->subject('Your Event Ticket')
+            ->view('emails.ticket.registered')
             ->with([
                 'ticket' => $this->ticket,
-                'qrCodeUrl' => asset($this->ticket->qr_code)
-            ]);
+                'qrCodeUrl' => asset('storage/' . $this->ticket->qr_code)
+            ])
+            ->attachData($pdf->output(), "Ticket-{$this->ticket->id}.pdf", [
+                'mime' => 'application/pdf',
+            ]);;
     }
 
     /**

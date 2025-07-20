@@ -9,16 +9,17 @@ use App\Http\Controllers\WalletController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 
-use Illuminate\Support\Facades\Mail;
+// use Illuminate\Support\Facades\Mail;
 
-Route::get('/test-email', function () {
-    Mail::raw('Test email content', function ($message) {
-        $message->to('davefast2003@gmail.com')
-                ->subject('Test Email');
-    });
+// Route::get('/test-email', function () {
+//     Mail::raw('Test email content', function ($message) {
+//         $message->to('davidtheartist2003@gmail.com')
+//                 ->subject('Test Email');
+//     });
 
-    return 'Email sent';
-});
+//     return 'Email sent';
+// });
+
 
 /*
 |--------------------------------------------------------------------------
