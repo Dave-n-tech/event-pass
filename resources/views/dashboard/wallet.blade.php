@@ -3,7 +3,7 @@
 @section('content')
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-2 sm:px-4 md:px-8">
-            <h1 class="text-2xl font-semibold text-gray-900">My Wallet</h1>
+            <h1 class="text-2xl font-semibold text-gray-900">My Wallet (₦)</h1>
 
             @if (session('success'))
                 <div class="mb-4 text-green-700 bg-green-100 p-4 rounded">

@@ -166,7 +166,7 @@
                             </div>
 
                             <div class="sm:col-span-3">
-                                <label for="price" class="block text-sm font-medium text-gray-700">Price ($)</label>
+                                <label for="price" class="block text-sm font-medium text-gray-700">Price (₦)</label>
                                 <input type="number" name="price" id="price" min="0"
                                     class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                     value="{{ old('price') }}">

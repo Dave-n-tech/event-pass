@@ -17,15 +17,17 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
+
         return [
             'user_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
-            'title' => $this->faker->sentence(4),
+            'title' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph(),
             'location' => $this->faker->city(),
-            'image' => 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4',
+            'image_url' => 'https://example.com/default.jpg',
+            'image_file' => '',
             'capacity' => $this->faker->numberBetween(20, 200),
-            'event_date' => $this->faker->dateTimeBetween('+1 week', '+6 months'),
-            'price' => $this->faker->randomFloat(2, 0, 250),
+            'event_date' => $this->faker->dateTimeBetween('+1 week', '+3 months'),
+            'price' => $this->faker->randomFloat(2, 0, 5000),
         ];
     }
 }

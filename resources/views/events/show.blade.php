@@ -50,7 +50,7 @@
 
                 <div class="flex items-center text-sm text-gray-500 mb-6">
                     <span class="font-semibold text-gray-700">Price:</span>
-                    <span class="ml-2">{{ $event->price ? '$' . number_format($event->price, 2) : 'Free' }}</span>
+                    <span class="ml-2">{{ $event->price ? '₦' . number_format($event->price, 2) : 'Free' }}</span>
                 </div>
 
                 @if (Auth::check())

@@ -40,9 +40,9 @@
                         <span class="ml-2 text-lg font-medium text-gray-800">EventPass</span>
                     </div>
                     <div class="ml-4 flex items-center md:ml-6">
-                        <button class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none">
+                        {{-- <button class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none">
                             <x-lucide-bell class="h-6 w-6" />
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
             </div>
